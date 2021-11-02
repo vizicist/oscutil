@@ -7,6 +7,7 @@ A simple OSC server to send MIDI messages.  It listens on an OSC port for messag
 The {data1} and/or {data2} can be omitted if the status byte is for MIDI messages of only 1 or 2 bytes.
 
 Options of osc2midi:
+<pre>
   -list
         list MIDI I/O
   -output string
@@ -15,6 +16,7 @@ Options of osc2midi:
         OSC port
   -verbose
         verbose mode
+</pre>
         
 Example use:
 
