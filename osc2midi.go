@@ -3,15 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 
 	"github.com/hypebeast/go-osc/osc"
 	"github.com/vizicist/portmidi"
 )
-
-func usage() {
-	log.Printf("Usage: osc2midi [-list] [-verbose] [-p oscport] [-o midioutput]\n")
-}
 
 var Verbose bool
 var Midiout *portmidi.Stream
@@ -33,20 +28,20 @@ func main() {
 		return
 	}
 	if *poutput == "" {
-		usage()
+		flag.Usage()
 		return
 	}
 	var err error
 	Midiout, err = GetOutputStream(*poutput)
 	if err != nil {
-		log.Printf("GetOutputStream: err=%s", err)
+		fmt.Printf("GetOutputStream: err=%s", err)
 		return
 	}
 
 	d := osc.NewStandardDispatcher()
 	err = d.AddMsgHandler("*", handleOSC)
 	if err != nil {
-		log.Printf("AddMsgHandler: err=%s\n", err)
+		fmt.Printf("AddMsgHandler: err=%s\n", err)
 		return
 	}
 
@@ -56,7 +51,7 @@ func main() {
 		Dispatcher: d,
 	}
 	if Verbose {
-		log.Printf("Now listening for OSC on port %d\n", *pport)
+		fmt.Printf("Now listening for OSC on port %d\n", *pport)
 	}
 	startOSC(server) // never returns
 }
@@ -73,7 +68,7 @@ func GetOutputStream(outputname string) (stream *portmidi.Stream, err error) {
 				return nil, fmt.Errorf("portmidi.NewOutputStream: err=%s", err)
 			}
 			if Verbose {
-				log.Printf("Opened MIDI output: %s\n", dev.Name)
+				fmt.Printf("Opened MIDI output: %s\n", dev.Name)
 			}
 			return stream, nil
 		}
@@ -88,17 +83,17 @@ func ListOutputs() {
 		devid := portmidi.DeviceID(n)
 		dev := portmidi.Info(devid)
 		if dev.IsOutputAvailable {
-			log.Printf("MIDI Output %d is %s\n", devid, dev.Name)
+			fmt.Printf("MIDI Output %d is %s\n", devid, dev.Name)
 		}
 		if dev.IsInputAvailable {
-			log.Printf("MIDI Input %d is %s\n", devid, dev.Name)
+			fmt.Printf("MIDI Input %d is %s\n", devid, dev.Name)
 		}
 	}
 }
 
 func handleOSC(msg *osc.Message) {
 	if Verbose {
-		log.Printf("handleOSC: OSC message = %s\n", msg)
+		fmt.Printf("handleOSC: OSC message = %s\n", msg)
 	}
 	switch msg.Address {
 	case "/midi":
@@ -108,10 +103,10 @@ func handleOSC(msg *osc.Message) {
 
 		switch {
 		case nargs == 0:
-			log.Printf("OSC /midi message: no arguments?\n")
+			fmt.Printf("OSC /midi message: no arguments?\n")
 			return
 		case nargs > 3:
-			log.Printf("OSC /midi message: too many arguments?\n")
+			fmt.Printf("OSC /midi message: too many arguments?\n")
 			return
 		}
 
@@ -120,12 +115,12 @@ func handleOSC(msg *osc.Message) {
 		for n := 0; n < nargs; n++ {
 			b[n], err = argAsInt(msg, n)
 			if err != nil {
-				log.Printf("OSC /midi message: err=%s\n", err)
+				fmt.Printf("OSC /midi message: err=%s\n", err)
 				return
 			}
 		}
 		if Verbose {
-			log.Printf("handleOSC: sending MIDI bytes %d %d %d\n", b[0], b[1], b[2])
+			fmt.Printf("handleOSC: sending MIDI bytes %d %d %d\n", b[0], b[1], b[2])
 		}
 		Midiout.WriteShort(int64(b[0]), int64(b[1]), int64(b[2]))
 	}
@@ -134,7 +129,7 @@ func handleOSC(msg *osc.Message) {
 func startOSC(server *osc.Server) {
 	err := server.ListenAndServe()
 	if err != nil {
-		log.Printf("ListenAndServer: err=%s\n", err)
+		fmt.Printf("ListenAndServer: err=%s\n", err)
 		return
 	}
 }
