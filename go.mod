@@ -1,4 +1,4 @@
-module github.com/vizicist/osc2midi
+module github.com/vizicist/oscutil
 
 go 1.16
 

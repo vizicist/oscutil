@@ -5,20 +5,28 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Run -list",
+            "name": "Run listmidi",
             "type": "go",
             "request": "launch",
             "mode": "auto",
             "program": "${fileDirname}",
-            "args": ["-list"]
+            "args": ["listmidi"]
         },
         {
-            "name": "Run example",
+            "name": "Run servemidi",
             "type": "go",
             "request": "launch",
             "mode": "auto",
             "program": "${fileDirname}",
-            "args": ["-verbose", "-oscport=2222", "-midiport=01. Internal MIDI"]
+            "args": ["servemidi", "2222", "01. Internal MIDI"]
+        },
+        {
+            "name": "Run send",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${fileDirname}",
+            "args": ["send", "2222", "/demo", "string", "123", "2.2"]
         }
     ]
 }
