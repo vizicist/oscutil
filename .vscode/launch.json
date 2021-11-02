@@ -18,7 +18,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${fileDirname}",
-            "args": ["-verbose", "-port=2222", "-output=01. Internal MIDI"]
+            "args": ["-verbose", "-oscport=2222", "-midiport=01. Internal MIDI"]
         }
     ]
 }

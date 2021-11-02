@@ -15,8 +15,8 @@ func main() {
 
 	plist := flag.Bool("list", false, "list MIDI I/O")
 	pverbose := flag.Bool("verbose", false, "verbose mode")
-	pport := flag.Int("port", 0, "OSC port")
-	poutput := flag.String("output", "", "MIDI Output Name")
+	poscport := flag.Int("oscport", 0, "OSC port number")
+	pmidiport := flag.String("midiport", "", "MIDI port Name")
 
 	flag.Parse()
 
@@ -27,12 +27,12 @@ func main() {
 		ListOutputs()
 		return
 	}
-	if *poutput == "" {
+	if *pmidiport == "" {
 		flag.Usage()
 		return
 	}
 	var err error
-	Midiout, err = GetOutputStream(*poutput)
+	Midiout, err = GetOutputStream(*pmidiport)
 	if err != nil {
 		fmt.Printf("GetOutputStream: err=%s", err)
 		return
@@ -45,13 +45,13 @@ func main() {
 		return
 	}
 
-	addr := fmt.Sprintf("127.0.0.1:%d", *pport)
+	addr := fmt.Sprintf("127.0.0.1:%d", *poscport)
 	server := &osc.Server{
 		Addr:       addr,
 		Dispatcher: d,
 	}
 	if Verbose {
-		fmt.Printf("Now listening for OSC on port %d\n", *pport)
+		fmt.Printf("Now listening for OSC on port %d\n", *poscport)
 	}
 	startOSC(server) // never returns
 }
