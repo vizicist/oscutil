@@ -1,5 +1,0 @@
-module github.com/vizicist/osc2midi
-
-go 1.17
-
-require github.com/vizicist/portmidi v0.0.0-20210914000823-0362764d0962
